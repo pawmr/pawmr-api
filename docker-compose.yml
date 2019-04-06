@@ -1,0 +1,24 @@
+version: '3'
+services:
+  api:
+    build: .
+    depends_on:
+      - localstack
+    ports:
+      - '3000:3000'
+    container_name: pawmr_api
+
+    environment:
+      AWS_ENDPOINT: 'http://dynamodb_localstack:8000'
+      AWS_REGION: 'us-west-2'
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - '8000:8000' # using port 8000 to be consistent with dynamodb local jar
+      - '8080:8080' # the localstack admin portal
+    container_name: dynamodb_localstack
+    environment:
+      SERVICES: dynamodb:8000
